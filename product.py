@@ -7,7 +7,7 @@ class Product(ABC):
         self.__name: str = name
         self.__price: float = price
         self.__stock: int = stock
-        self.supplier: Supplier = supplier
+        self.__supplier: Supplier = supplier
 
     def update_stock(self, quantity):
         print("Update Stock")
@@ -33,6 +33,9 @@ class Product(ABC):
     
     def get_stock(self):
         return self.__stock
+
+    def get_supplier(self):
+        return self.__supplier
 
     @abstractmethod
     def get_fulfilment_info(self):
