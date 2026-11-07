@@ -10,7 +10,9 @@ class Inventory:
     def remove_product(self, product_id: str) -> None:
         product = self.find_product(product_id)
         if product is not None: 
-            self.__products.remove(product_id)
+            self.__products.remove(product)
+        else:
+            print(f"Product {product_id} not found.")
 
     def find_product(self, product_id: str) -> Product | None:
         for product in self.__products:
