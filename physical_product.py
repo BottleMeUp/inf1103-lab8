@@ -19,5 +19,5 @@ class PhysicalProduct(Product, CanBeShipped):
     def get_fulfilment_info(self) -> str:
         return "Product requires physical shipping"
 
-    def calculate_shipping_cost(self) -> float:
+    def calculate_shipping_cost(self) -> int:
         return self.__weight * 10
