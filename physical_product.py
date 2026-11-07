@@ -9,15 +9,15 @@ class PhysicalProduct(Product, CanBeShipped):
         self.__weight = weight
 
     # Override the parent method
-    def display_information(self):
+    def display_information(self) -> None:
         super().display_information()
         print(f"Weight: {self.__weight} kg")
 
-    def get_weight(self):
+    def get_weight(self) -> float:
         return self.__weight
 
-    def get_fulfilment_info(self):
+    def get_fulfilment_info(self) -> str:
         return "Product requires physical shipping"
 
-    def calculate_shipping_cost(self):
+    def calculate_shipping_cost(self) -> float:
         return self.__weight * 10

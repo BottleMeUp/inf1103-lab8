@@ -124,7 +124,7 @@ while True:
 
     match option:
         case 1:
-            main_inventory.display_all()
+            main_inventory.display_all_products()
         case 2:
             product = prompt_new_product()
             if product is None:
@@ -133,7 +133,7 @@ while True:
             print("Product added.")
         case 3:
             product_id = input("Enter Product ID: ").strip()
-            product = main_inventory.search_product(product_id)
+            product = main_inventory.find_product(product_id)
             if product is None:
                 print("Product not found.")
                 continue
@@ -145,7 +145,7 @@ while True:
             product.update_stock(new_quantity)
         case 4:
             product_id = input("Enter Product ID: ").strip()
-            product = main_inventory.search_product(product_id)
+            product = main_inventory.find_product(product_id)
             if product:
                 show_product_details(product)
             else:
