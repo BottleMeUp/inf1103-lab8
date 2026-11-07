@@ -100,11 +100,12 @@ def exit_program(inventory: Inventory) -> None:
 
 def show_product_details(product: Product) -> None:
     product.display_information()
+    print(product.get_fulfilment_info())
     print(f"Fulfilment: {product.get_fulfilment_info()}")
-    if isinstance(product, CanBeShipped):
-        print(f"Shipping cost: ${product.calculate_shipping_cost():.2f}")
-    print("Supplier:")
-    product.get_supplier().display_information()
+    # if isinstance(product, CanBeShipped):
+    #     print(f"Shipping cost: ${product.calculate_shipping_cost():.2f}")
+    # print("Supplier:")
+    # product.get_supplier().display_information()
 
 
 def show_menu() -> None:
@@ -164,8 +165,6 @@ def prompt_new_product() -> Product | None:
         print("Invalid numeric value.")
         return None
 
-
-# ---------- Lab 8 tests (use their own temporary objects) ----------
 
 def run_association_test() -> None:
     print("\n=== ASSOCIATION TEST: Supplier and Product ===")
@@ -255,29 +254,56 @@ def run_composition_test() -> None:
     ebook.display_information()
 
 
-def run_polymorphism_test() -> None:
-    print("\n=== POLYMORPHISM AND LSP TEST ===")
+def run_lsp_test() -> None:
+    print("\n=== LSP TEST: Substitutability ===")
     supplier = Supplier("S900", "Test Supplier", "test@example.com")
     laptop = PhysicalProduct("T-P1", "Test Laptop", 1200.0, 10, 2.5, supplier)
     ebook = DigitalProduct("T-D1", "Test Ebook", 25.0, 100, 5.0, supplier)
 
-    print("\nshow_product_details() called with both product types:")
-    for product in (laptop, ebook):
-        print()
-        show_product_details(product)
+    print("\n1. One function, both subclasses (no changes to the function):")
+    show_product_details(laptop)
+    print()
+    show_product_details(ebook)
 
+    print("\n2. Both types in the same Inventory:")
     test_inventory = Inventory()
     test_inventory.add_product(laptop)
     test_inventory.add_product(ebook)
+    test_inventory.display_all_products()
 
-    print("\nOne loop over the Product collection (no isinstance needed):")
-    for product in test_inventory.get_all_products():
-        product.display_information()
-        print("Fulfilment:", product.get_fulfilment_info())
+    print("\n3. Normal Inventory operations work for both:")
+    print("find_product('T-P1'):", test_inventory.find_product("T-P1").get_name())
+    print("find_product('T-D1'):", test_inventory.find_product("T-D1").get_name())
 
-    print("\nupdate_stock() behaves the same for both subclasses:")
+    print("\n4. update_stock() keeps the same meaning for both:")
     laptop.update_stock(5)
     ebook.update_stock(50)
+    laptop.update_stock(-1)   # rejected the same way for both
+    ebook.update_stock(-1)
+    print("Laptop stock:", laptop.get_stock(), "| Ebook stock:", ebook.get_stock())
+
+    test_inventory.remove_product("T-D1")
+    print("\n5. Remove works for either type. Products left:",
+          len(test_inventory.get_all_products()))
+
+def run_polymorphism_test() -> None:
+    print("\n=== POLYMORPHISM TEST ===")
+    supplier = Supplier("S900", "Test Supplier", "test@example.com")
+
+    # Predict first (write these in your Word doc BEFORE running):
+    #   Laptop -> "Product requires physical shipping"
+    #   Ebook  -> "Product is delivered digitally"
+
+    inventory = Inventory()
+    inventory.add_product(PhysicalProduct("T-P1", "Test Laptop", 1200.0, 10, 2.5, supplier))
+    inventory.add_product(DigitalProduct("T-D1", "Test Ebook", 25.0, 100, 5.0, supplier))
+    inventory.add_product(PhysicalProduct("T-P2", "Test Keyboard", 80.0, 30, 0.8, supplier))
+
+    print("\nOne loop over the Product collection, no isinstance():\n")
+    for product in inventory.get_all_products():
+        product.display_information()
+        print(f"Fulfilment: {product.get_fulfilment_info()}")
+        print()
 
 
 # ---------- Main program ----------
@@ -330,8 +356,10 @@ while True:
         case 8:
             run_composition_test()
         case 9:
-            run_polymorphism_test()
+            run_lsp_test()
         case 10:
+            run_polymorphism_test()
+        case 11:
             exit_program(main_inventory)
             break
         case _:
