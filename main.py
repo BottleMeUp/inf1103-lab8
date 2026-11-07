@@ -119,8 +119,9 @@ def show_menu() -> None:
 6. Test: Association (Supplier - Product)
 7. Test: Aggregation (Inventory - Product)
 8. Test: Composition (Order - OrderLine)
-9. Test: Polymorphism and LSP
-10. Exit
+9. Test: LSP
+10. Test: Polymorphism 
+11. Exit
 ----------------------------
 """)
 
